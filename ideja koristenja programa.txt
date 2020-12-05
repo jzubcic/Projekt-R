@@ -1,0 +1,27 @@
+Ideja korištenja programa: 
+	-dodamo komponente mreže (ovako nekako ili kroz nekakav configuration .txt file?):
+		 
+		 Subnetwork managementSubnetwork = new Subnetwork();
+		 dhcp.addSubnetwork(managementSubnetwork);
+		 Subnetwork accountingSubnetwork = new Subnetwork();
+		 dhcp.addSubnetwork(accountingSubnetwork);
+		 
+		 
+		 for (int i = 0; i < 10; i++) {
+			managementSubnetwork.addComputer(new Computer(name, ipAddress, operatingSystem, credentials));
+		 }
+		 
+		 ...
+		 
+	-pokrenemo crva na nekoj lokaciji:
+
+		 NotPetya notPetya = new NotPetya(); 
+		 notPetya.startSpread(managementSubnetwork.getPcByIp("192.168.53.11"));
+		 	
+	-pokrenemo dretvu koja će pratiti stanje simulacije:
+
+		 SimulationState state = new SimulationState(dhcp); 
+		 state.run(); 
+		
+	-crv se širi, ispisuju se zaražena računala, te obavijest kad se crv 
+	 ne bude više mogao širiti
