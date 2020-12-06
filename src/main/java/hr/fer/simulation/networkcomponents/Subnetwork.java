@@ -9,6 +9,7 @@ public class Subnetwork {
 
 	private String name; 
 	private List<Computer> computers = new ArrayList<>();
+	private String ipAddress; //IP address of subnetwork in format 192.168.53.XX
 	
 	public Subnetwork(String name, List<Computer> computers) {
 		this.name = name;
@@ -47,8 +48,12 @@ public class Subnetwork {
 		}
 		return null; 
 	}
-	
-	
-	
-	
+
+	public String getIpAddress() {
+		return ipAddress;
+	}
+
+	public void setIpAddress(String ipAddress) {
+		this.ipAddress = ipAddress;
+	}
 }

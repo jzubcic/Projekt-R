@@ -1,19 +1,54 @@
 package hr.fer.simulation.networkcomponents;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import hr.fer.simulation.computers.Computer;
 
 public class Firewall {
-
-	//neka Mapa koja cuva par podmreza i bool vrijednost koja predstavlja
-	//ho�e li promet izme�u njih biti propu�ten
+	
+	private List<PairOfSubnetworks> allowedConnections = new ArrayList<>(); 
+	
+	class PairOfSubnetworks {
+		
+		Subnetwork subnetwork1; 
+		Subnetwork subnetwork2; 
+		
+		public PairOfSubnetworks(Subnetwork subnetwork1, Subnetwork subnetwork2) {
+			this.subnetwork1 = subnetwork1; 
+			this.subnetwork2 = subnetwork2;
+		}
+		
+		public boolean isEqual(Subnetwork subnetwork1, Subnetwork subnetwork2) {
+			if ((subnetwork1.equals(this.subnetwork1) && subnetwork2.equals(this.subnetwork2)) ||
+					(subnetwork2.equals(this.subnetwork1) && subnetwork1.equals(this.subnetwork2))) {
+				return true;
+			} else {
+				return false; 
+			}
+		}
+		
+		public Subnetwork getPair(Subnetwork subnetwork) {
+			if (subnetwork.equals(subnetwork1)) return subnetwork2;
+			if (subnetwork.equals(subnetwork2)) return subnetwork1;
+			return null; 
+		}
+			
+	}
 	
 	public boolean isTrafficAllowed(Subnetwork subnetwork1, Subnetwork subnetwork2) {
-		//TODO
+		for (PairOfSubnetworks pair : allowedConnections) {
+			if (pair.isEqual(subnetwork1, subnetwork2)) {
+				return true;
+			}				
+		}
+		
 		return false; 
 	}
 	
-	public boolean isTrafficAllowed(Computer computer1, Computer computer2) {
+	public static List<Subnetwork> getAllReachableSubnetworks(Computer computer) {
 		//TODO
-		return false; 
+		return null;
 	}
+	
 }

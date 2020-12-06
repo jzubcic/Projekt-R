@@ -13,4 +13,5 @@ public class Mimikatz {
 	public String stealCredentials() {
 		return computer.getCredentials();
 	}
+	
 }

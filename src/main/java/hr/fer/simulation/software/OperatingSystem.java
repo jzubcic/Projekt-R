@@ -8,7 +8,7 @@ public class OperatingSystem {
 	public OperatingSystem(String name) {
 		this.name = name; 
 		if (name.equals("Windows Server 2012 R2 6.3") || 
-				name.equals("Windows 7 Service Pack 1 6.1")) { //OS-ovi koji nemaju patchanu SMB ranjivost
+				name.equals("Windows 7 Service Pack 1 6.1")) { //Operating systems which do not have the SMB vulnerability patched
 			smbVulnerabilityPatched = false; 
 		} else {
 			smbVulnerabilityPatched = true;

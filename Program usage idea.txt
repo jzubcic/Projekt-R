@@ -1,5 +1,5 @@
-Ideja korištenja programa: 
-	-dodamo komponente mreže (ovako nekako ili kroz nekakav configuration .txt file?):
+Program usage idea: 
+	-add network components (like so or by using some configuration .txt file?):
 		 
 		 Subnetwork managementSubnetwork = new Subnetwork();
 		 dhcp.addSubnetwork(managementSubnetwork);
@@ -13,15 +13,16 @@ Ideja korištenja programa:
 		 
 		 ...
 		 
-	-pokrenemo crva na nekoj lokaciji:
+	-spawn the worm at some location:
 
 		 NotPetya notPetya = new NotPetya(); 
 		 notPetya.startSpread(managementSubnetwork.getPcByIp("192.168.53.11"));
 		 	
-	-pokrenemo dretvu koja će pratiti stanje simulacije:
+	-start the thread which will monitor the state of the simulation:
 
 		 SimulationState state = new SimulationState(dhcp); 
 		 state.run(); 
 		
-	-crv se širi, ispisuju se zaražena računala, te obavijest kad se crv 
-	 ne bude više mogao širiti
+	-the worm starts spreading, infected computers and computers that have
+	 had their data encrypted are printed to user, as well as a notification
+	 when the worm can no longer spread 

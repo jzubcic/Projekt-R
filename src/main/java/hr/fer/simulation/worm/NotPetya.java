@@ -3,6 +3,8 @@ package hr.fer.simulation.worm;
 import java.util.List;
 
 import hr.fer.simulation.computers.Computer;
+import hr.fer.simulation.networkcomponents.Firewall;
+import hr.fer.simulation.networkcomponents.Subnetwork;
 
 public class NotPetya extends Thread {
 
@@ -26,7 +28,7 @@ public class NotPetya extends Thread {
 		
 		List<Computer> remoteAccessComputers = infectedComputer.getRemoteAccessComputer();
 		
-		for (Computer computer : remoteAccessComputers) { //drukcije iterirati, proci kroz sva racunala do kojih firewall ne blokira promet
+		for (Computer computer : remoteAccessComputers) { //get all Computers that the firewall allows traffic to 
 			if (!computer.getInfectedStatus() && !computer.getOperatingSystem().getSmbVulnerabilityPatched()) {
 				NotPetya notPetya = new NotPetya(computer); 
 				notPetya.run();
@@ -36,10 +38,12 @@ public class NotPetya extends Thread {
 		Mimikatz mimikatz = new Mimikatz(infectedComputer);
 		String credentials = mimikatz.stealCredentials(); 
 		
-		for (Computer computer : remoteAccessComputers) {
-			if (!computer.getInfectedStatus()) {
-				NotPetya notPetya = new NotPetya(computer); 
-				notPetya.run();
+		for (Subnetwork subnetwork : Firewall.getAllReachableSubnetworks(infectedComputer)) {
+			for (Computer computer : subnetwork.getComputers()) {
+				if (!computer.getInfectedStatus()) {
+					NotPetya notPetya = new NotPetya(computer); 
+					notPetya.run();
+				}
 			}
 		}
 				
