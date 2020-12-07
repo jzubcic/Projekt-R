@@ -8,7 +8,7 @@ import hr.fer.simulation.computers.Computer;
 import hr.fer.simulation.networkcomponents.DHCPServer;
 import hr.fer.simulation.networkcomponents.Subnetwork;
 
-public class SimulationState extends Thread { 
+public class SimulationState implements Runnable { 
 	
 	private DHCPServer dhcp; 
 	private List<String> infectedComputers;
@@ -20,21 +20,22 @@ public class SimulationState extends Thread {
 
 	@Override
 	public void run() {
-
+		System.out.println("Simulation has started.\n" + "-".repeat(50));
+		
 		infectedComputers = new ArrayList<>();
 		encryptedComputers = new ArrayList<>();
 		
 		Map<String, Subnetwork> allSubnetworks = dhcp.getAllSubnetworks();
 		int timer = 0; 
-		while (timer != 5) {
+		while (timer != 50) {
 			for (Subnetwork subnetwork : allSubnetworks.values()) {
 				for (Computer c : subnetwork.getComputers()) {
 					if (c.getInfectedStatus() && !infectedComputers.contains(c.getIpAddress())) {
-						System.out.println("Computer " + c.getName() + c.getIpAddress() + " was infected.");
+						System.out.println("Computer " + c + " was infected.");
 						infectedComputers.add(c.getIpAddress()); 
 						timer = 0; 
 					} else if (c.getDataEncrypted() && !encryptedComputers.contains(c.getIpAddress())) {
-						System.out.println("The data on computer " + c.getName() + c.getIpAddress() + " is encrypted!");
+						System.out.println("The data on computer " + c + " is encrypted!");
 						encryptedComputers.add(c.getIpAddress());
 						timer = 0; 
 					}
@@ -42,14 +43,14 @@ public class SimulationState extends Thread {
 			}
 			
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			timer++;
 		}
 		
-		System.out.println("The worm has stopped spreading.");
+		System.out.println("-".repeat(50) + "\nThe worm has stopped spreading.");
 	}
 	
 	

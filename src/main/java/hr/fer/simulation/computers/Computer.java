@@ -16,12 +16,11 @@ public class Computer {
 	
 	
 	
-	public Computer(String name, String ipAddress, OperatingSystem operatingSystem, String credentials) {
+	public Computer(String name, String ipAddress, OperatingSystem operatingSystem) {
 		super();
 		this.name = name;
 		this.ipAddress = ipAddress;
 		this.operatingSystem = operatingSystem;
-		this.credentials = credentials;
 	}
 
 	public void setName(String name) {
@@ -61,5 +60,9 @@ public class Computer {
 	
 	public boolean getDataEncrypted() {
 		return dataEncrypted; 
+	}
+	
+	public String toString() {
+		return name + " " + ipAddress; 
 	}
 }

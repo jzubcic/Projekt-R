@@ -9,15 +9,17 @@ public class Subnetwork {
 
 	private String name; 
 	private List<Computer> computers = new ArrayList<>();
-	private String ipAddress; //IP address of subnetwork in format 192.168.53.XX
+	private String ipAddress; //IP address of subnetwork in format XXX.XXX.XX.0
 	
-	public Subnetwork(String name, List<Computer> computers) {
+	public Subnetwork(String name, String ipAddress, List<Computer> computers) {
 		this.name = name;
+		this.ipAddress = ipAddress;
 		this.computers = computers;
 	}
 
-	public Subnetwork(String name) {
+	public Subnetwork(String name, String ipAddress) {
 		this.name = name;
+		this.ipAddress = ipAddress;
 	}
 
 	public String getName() {
