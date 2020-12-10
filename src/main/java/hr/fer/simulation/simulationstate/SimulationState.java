@@ -1,5 +1,7 @@
 package hr.fer.simulation.simulationstate;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,15 +29,16 @@ public class SimulationState implements Runnable {
 		
 		Map<String, Subnetwork> allSubnetworks = dhcp.getAllSubnetworks();
 		int timer = 0; 
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss"); 
 		while (timer != 50) {
 			for (Subnetwork subnetwork : allSubnetworks.values()) {
 				for (Computer c : subnetwork.getComputers()) {
-					if (c.getInfectedStatus() && !infectedComputers.contains(c.getIpAddress())) {
-						System.out.println("Computer " + c + " was infected.");
+					if (c.getInfectedStatus() && !infectedComputers.contains(c.getIpAddress())) {					  
+						System.out.println("[" + dtf.format(LocalDateTime.now()) + "] The worm has spread to " + c + " from " + (c.getInfectedFrom() == null ? "user input." : c.getInfectedFrom()));
 						infectedComputers.add(c.getIpAddress()); 
 						timer = 0; 
 					} else if (c.getDataEncrypted() && !encryptedComputers.contains(c.getIpAddress())) {
-						System.out.println("The data on computer " + c + " is encrypted!");
+						System.out.println("[" + dtf.format(LocalDateTime.now()) + "] The data on computer " + c + " is encrypted!");
 						encryptedComputers.add(c.getIpAddress());
 						timer = 0; 
 					}

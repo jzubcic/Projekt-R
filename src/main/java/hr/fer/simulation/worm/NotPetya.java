@@ -34,7 +34,8 @@ public class NotPetya implements Runnable {
 		for (Computer computer : DHCPServer.getAllComputersInNetwork()) { //get all Computers that the firewall allows traffic to 
 			if (!computer.getInfectedStatus() && !computer.getOperatingSystem().getSmbVulnerabilityPatched()) {
 				NotPetya notPetya = new NotPetya(computer); 
-				Thread thread = new Thread(notPetya); 
+				Thread thread = new Thread(notPetya);
+				computer.setInfectedFrom(infectedComputer);
 				thread.start();
 			}
 		}

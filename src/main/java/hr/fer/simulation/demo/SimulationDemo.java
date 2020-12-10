@@ -66,6 +66,7 @@ public class SimulationDemo {
 		
 		NotPetya notPetya = new NotPetya(localNetwork.getPcByIp("192.168.53.22"));
 		Thread thread = new Thread(notPetya); 
+		
 		thread.start();	
 		
 		SimulationState state = new SimulationState(dhcp); 

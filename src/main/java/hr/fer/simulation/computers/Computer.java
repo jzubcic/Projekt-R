@@ -11,7 +11,8 @@ public class Computer {
 	private OperatingSystem operatingSystem; 
 	private boolean infectedStatus; 
 	private String credentials; 
-	private List<Computer> remoteAccessComputers; 
+	private List<Computer> remoteAccessComputers;
+	private Computer infectedFrom; 
 	private boolean dataEncrypted = false; 
 	
 	
@@ -64,5 +65,13 @@ public class Computer {
 	
 	public String toString() {
 		return name + " " + ipAddress; 
+	}
+	
+	public void setInfectedFrom(Computer computer) {
+		infectedFrom = computer;
+	}
+	
+	public Computer getInfectedFrom() {
+		return infectedFrom; 
 	}
 }
