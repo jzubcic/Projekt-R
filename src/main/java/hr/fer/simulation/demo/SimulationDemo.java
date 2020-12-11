@@ -53,7 +53,9 @@ public class SimulationDemo {
 		datacenter.addComputer(new Computer("Backup server", "192.168.52.101", new OperatingSystem("Windows Server 2012 R2 6.3")));
 		datacenter.addComputer(new Computer("Private web server", "192.168.52.102", new OperatingSystem("Windows Server 2012 R2 6.3")));
 		datacenter.addComputer(new Computer("Database server", "192.168.52.103", new OperatingSystem("Windows Server 2012 R2 6.3")));
+		datacenter.getPcByIp("192.168.52.103").setContainsCriticalData(true);
 		datacenter.addComputer(new Computer("Domain Controller", "192.168.52.104", new OperatingSystem("Windows Server 2012 R2 6.3")));
+		datacenter.getPcByIp("192.168.52.104").setContainsCriticalData(true);
 		
 		Subnetwork dmzNetwork = new Subnetwork("DMZ", "203.0.113.0");
 		dmzNetwork.addComputer(new Computer("Public web server", "203.0.113.101", new OperatingSystem("Red Hat Enterprise Linux v7.3")));

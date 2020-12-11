@@ -13,7 +13,8 @@ public class Computer {
 	private String credentials; 
 	private List<Computer> remoteAccessComputers;
 	private Computer infectedFrom; 
-	private boolean dataEncrypted = false; 
+	private boolean dataEncrypted = false;
+	private boolean containsCriticalData = false; 
 	
 	
 	
@@ -73,5 +74,13 @@ public class Computer {
 	
 	public Computer getInfectedFrom() {
 		return infectedFrom; 
+	}
+	
+	public void setContainsCriticalData(boolean criticalData) {
+		containsCriticalData = criticalData; 
+	}
+	
+	public boolean getContainsCriticalData() {
+		return containsCriticalData; 
 	}
 }

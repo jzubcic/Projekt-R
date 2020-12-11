@@ -36,10 +36,14 @@ public class SimulationState implements Runnable {
 					if (c.getInfectedStatus() && !infectedComputers.contains(c.getIpAddress())) {					  
 						System.out.println("[" + dtf.format(LocalDateTime.now()) + "] The worm has spread to " + c + " from " + (c.getInfectedFrom() == null ? "user input." : c.getInfectedFrom()));
 						infectedComputers.add(c.getIpAddress()); 
+						
 						timer = 0; 
 					} else if (c.getDataEncrypted() && !encryptedComputers.contains(c.getIpAddress())) {
 						System.out.println("[" + dtf.format(LocalDateTime.now()) + "] The data on computer " + c + " is encrypted!");
 						encryptedComputers.add(c.getIpAddress());
+						if (c.getContainsCriticalData()) {
+							System.out.println("[" + dtf.format(LocalDateTime.now()) + "] The critical data stored on computer " + c + " has been lost!");
+						}
 						timer = 0; 
 					}
 				}

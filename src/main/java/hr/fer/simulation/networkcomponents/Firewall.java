@@ -8,6 +8,7 @@ import hr.fer.simulation.computers.Computer;
 public class Firewall {
 	
 	private List<PairOfSubnetworks> allowedConnections = new ArrayList<>(); 
+	private List<Connection> allowedComputerConnections = new ArrayList<>(); 
 	
 	class PairOfSubnetworks {
 		
@@ -37,6 +38,10 @@ public class Firewall {
 	}
 	
 	public boolean isTrafficAllowed(Subnetwork subnetwork1, Subnetwork subnetwork2) {
+		if (subnetwork1.equals(subnetwork2)) {
+			return true; 
+		}
+		
 		for (PairOfSubnetworks pair : allowedConnections) {
 			if (pair.isEqual(subnetwork1, subnetwork2)) {
 				return true;
