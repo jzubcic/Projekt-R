@@ -30,6 +30,7 @@ public class SimulationState implements Runnable {
 		Map<String, Subnetwork> allSubnetworks = dhcp.getAllSubnetworks();
 		int timer = 0; 
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss"); 
+		boolean idsDetected = false; 
 		while (timer != 50) {
 			for (Subnetwork subnetwork : allSubnetworks.values()) {
 				for (Computer c : subnetwork.getComputers()) {
@@ -46,6 +47,12 @@ public class SimulationState implements Runnable {
 						}
 						timer = 0; 
 					}
+				}
+				
+				if (!idsDetected && (double) infectedComputers.size() / DHCPServer.getAllComputersInNetwork().size() > 0.3) {
+					System.out.println("[" + dtf.format(LocalDateTime.now()) + 
+						"] IDS has detected unusual amounts of traffic, an intrusion may have happened!"); 
+					idsDetected = true; 
 				}
 			}
 			

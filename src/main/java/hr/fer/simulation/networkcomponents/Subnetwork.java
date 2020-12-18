@@ -58,4 +58,13 @@ public class Subnetwork {
 	public void setIpAddress(String ipAddress) {
 		this.ipAddress = ipAddress;
 	}
+	
+	public boolean containsComputer(Computer computer) {
+		for (Computer c : computers) {
+			if (c.equals(computer)) {
+				return true; 
+			}
+		}
+		return false; 
+	}
 }
