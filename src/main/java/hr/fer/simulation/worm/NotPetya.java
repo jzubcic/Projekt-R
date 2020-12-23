@@ -59,6 +59,7 @@ public class NotPetya implements Runnable {
 				if (!computer.getInfectedStatus()) {
 					NotPetya notPetya = new NotPetya(computer); 
 					Thread thread = new Thread(notPetya); 
+					computer.setInfectedFrom(infectedComputer);
 					thread.start();
 				}			
 		}

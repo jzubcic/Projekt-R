@@ -2,6 +2,7 @@ package hr.fer.simulation.demo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import hr.fer.simulation.computers.Computer;
@@ -101,7 +102,21 @@ public class SimulationDemo {
 		
 		Firewall.addAllowedConnection(dmzNetwork.getPcByIp("203.0.113.101"), datacenter.getPcByIp("192.168.52.103"), ConnectionType.HTTPS);
 		
-		NotPetya notPetya = new NotPetya(localNetwork.getPcByIp("192.168.53.41"));
+		System.out.print("Please provide IP address from where the worm will start its spread: ");
+		
+		Scanner sc = new Scanner(System.in);
+		String start = new String(); 
+		
+		Computer startingPoint = null; 
+		while (startingPoint == null) {
+			start = sc.nextLine();
+			if ((startingPoint = dhcp.getPcByIp(start)) == null) {
+				System.out.println("Network does not contain PC with given IP address.");
+			}
+		}
+		
+		NotPetya notPetya = new NotPetya(startingPoint);
+		//NotPetya notPetya = new NotPetya(localNetwork.getPcByIp("192.168.53.41"));
 		Thread thread = new Thread(notPetya); 
 		
 		thread.start();	

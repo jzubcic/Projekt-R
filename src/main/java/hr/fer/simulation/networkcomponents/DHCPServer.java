@@ -36,4 +36,11 @@ public class DHCPServer {
 		}
 		return list; 
 	}
+	
+	public static Computer getPcByIp(String ip) {
+		for (Subnetwork subnetwork : allSubnetworks.values()) {
+			if (subnetwork.getPcByIp(ip) != null) return subnetwork.getPcByIp(ip); 
+		}
+		return null; 
+	}
 }
