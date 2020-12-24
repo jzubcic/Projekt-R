@@ -11,11 +11,16 @@ import hr.fer.simulation.networkcomponents.Subnetwork;
 
 public class NotPetya implements Runnable {
 
-	private Computer infectedComputer; 
+	private Computer infectedComputer;
+	private boolean remoteShareSpread; 
+	private boolean eternalBlueSpread; 
 
 	
-	public NotPetya(Computer infectedComputer) {
+	public NotPetya(Computer infectedComputer, boolean remoteShareSpread,
+						boolean eternalBlueSpread) {
 		this.infectedComputer = infectedComputer;
+		this.remoteShareSpread = remoteShareSpread;
+		this.eternalBlueSpread = eternalBlueSpread;
 	}
 	
 	@Override
@@ -36,34 +41,38 @@ public class NotPetya implements Runnable {
 			if (subnetwork.containsComputer(infectedComputer)) currentSubnetwork = subnetwork;
 		}
 		
-		for (Computer computer : currentSubnetwork.getComputers()) {
-			spreadBySMB(computer); 
+		if (eternalBlueSpread) {
+			for (Computer computer : currentSubnetwork.getComputers()) {
+				spreadBySMB(computer); 
+			}
+		
+			for (Computer computer : Firewall.getAllReachableComputers(infectedComputer, ConnectionType.SMB)) { //get all Computers that the firewall allows traffic to 
+				spreadBySMB(computer); 
+			}
 		}
 		
-		for (Computer computer : Firewall.getAllReachableComputers(infectedComputer, ConnectionType.SMB)) { //get all Computers that the firewall allows traffic to 
-			spreadBySMB(computer); 
+		if (remoteShareSpread) {
+			Mimikatz mimikatz = new Mimikatz(infectedComputer);
+			String credentials;
+		
+			try {
+				Thread.sleep(500);
+				credentials = mimikatz.stealCredentials(); // Mimikatz needs a while to extract the credentials
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+			for (Computer computer : Firewall.getAllReachableComputersMultiple(infectedComputer, ConnectionType.RDP,
+																							 ConnectionType.SSH)) {
+					if (!computer.getInfectedStatus()) {
+						NotPetya notPetya = new NotPetya(computer, remoteShareSpread, eternalBlueSpread); 
+						Thread thread = new Thread(notPetya); 
+						computer.setInfectedFrom(infectedComputer);
+						thread.start();
+					}			
+			}
 		}
 		
-		Mimikatz mimikatz = new Mimikatz(infectedComputer);
-		String credentials;
-		
-		try {
-			Thread.sleep(500);
-			credentials = mimikatz.stealCredentials(); // Mimikatz needs a while to extract the credentials
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
-		for (Computer computer : Firewall.getAllReachableComputersMultiple(infectedComputer, ConnectionType.SMB, ConnectionType.RDP,
-																						 ConnectionType.SSH)) {
-				if (!computer.getInfectedStatus()) {
-					NotPetya notPetya = new NotPetya(computer); 
-					Thread thread = new Thread(notPetya); 
-					computer.setInfectedFrom(infectedComputer);
-					thread.start();
-				}			
-		}
-				
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
@@ -76,7 +85,7 @@ public class NotPetya implements Runnable {
 	
 	private void spreadBySMB(Computer computer) {
 		if (!computer.getInfectedStatus() && !computer.getOperatingSystem().getSmbVulnerabilityPatched()) {
-			NotPetya notPetya = new NotPetya(computer); 
+			NotPetya notPetya = new NotPetya(computer, remoteShareSpread, eternalBlueSpread); 
 			Thread thread = new Thread(notPetya);
 			computer.setInfectedFrom(infectedComputer);
 			thread.start();

@@ -15,9 +15,15 @@ public class SimulationState implements Runnable {
 	private DHCPServer dhcp; 
 	private List<String> infectedComputers;
 	private List<String> encryptedComputers;
+	private boolean turnOff; 
 	
 	public SimulationState(DHCPServer dhcp) {
 		this.dhcp = dhcp; 
+	}
+	
+	public SimulationState(DHCPServer dhcp, boolean turnOff) {
+		this.dhcp = dhcp; 
+		this.turnOff = turnOff; 
 	}
 
 	@Override
@@ -28,10 +34,18 @@ public class SimulationState implements Runnable {
 		encryptedComputers = new ArrayList<>();
 		
 		Map<String, Subnetwork> allSubnetworks = dhcp.getAllSubnetworks();
+		
+		int totalComputersInNetwork = 0;
+		for (Subnetwork subnetwork : allSubnetworks.values()) {
+			totalComputersInNetwork += subnetwork.getComputers().size();
+		}
+		
 		int timer = 0; 
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss"); 
 		boolean idsDetected = false; 
+		boolean turnedOff = false; 
 		while (timer != 50) {
+			if (turnedOff) break; 
 			for (Subnetwork subnetwork : allSubnetworks.values()) {
 				for (Computer c : subnetwork.getComputers()) {
 					if (c.getInfectedStatus() && !infectedComputers.contains(c.getIpAddress())) {					  
@@ -52,7 +66,12 @@ public class SimulationState implements Runnable {
 				if (!idsDetected && (double) infectedComputers.size() / DHCPServer.getAllComputersInNetwork().size() > 0.3) {
 					System.out.println("[" + dtf.format(LocalDateTime.now()) + 
 						"] IDS has detected unusual amounts of traffic, an intrusion may have happened!"); 
-					idsDetected = true; 
+					idsDetected = true;
+					if (turnOff) {
+						System.out.println("[" + dtf.format(LocalDateTime.now()) + 
+						"] Turning off all computers in the network to prevent the spread...");
+						 turnedOff = true; 
+					}
 				}
 			}
 			
@@ -65,6 +84,8 @@ public class SimulationState implements Runnable {
 		}
 		
 		System.out.println("-".repeat(50) + "\nThe worm has stopped spreading.");
+		System.out.println("The worm has spread to " + infectedComputers.size() +
+							" computers out of "+ totalComputersInNetwork + " computers in the network.");
 	}
 	
 	

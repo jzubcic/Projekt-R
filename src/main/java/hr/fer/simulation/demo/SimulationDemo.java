@@ -105,23 +105,34 @@ public class SimulationDemo {
 		System.out.print("Please provide IP address from where the worm will start its spread: ");
 		
 		Scanner sc = new Scanner(System.in);
-		String start = new String(); 
+		String str = new String(); 
 		
 		Computer startingPoint = null; 
 		while (startingPoint == null) {
-			start = sc.nextLine();
-			if ((startingPoint = dhcp.getPcByIp(start)) == null) {
+			str = sc.nextLine();
+			if ((startingPoint = dhcp.getPcByIp(str)) == null) {
 				System.out.println("Network does not contain PC with given IP address.");
 			}
 		}
 		
-		NotPetya notPetya = new NotPetya(startingPoint);
-		//NotPetya notPetya = new NotPetya(localNetwork.getPcByIp("192.168.53.41"));
+		
+		System.out.println("Do you want to simulate all computers being shut down after IDS detects an intrusion? (y/n)");
+		String turnOff = sc.nextLine();
+		
+		System.out.println("Do you want to allow the worm to spread to remote shares? (y/n)");
+		String remoteShares = sc.nextLine();
+		
+		System.out.println("Do you want to allow the worm to spread using EternalBlue exploit? (y/n)");
+		String eternalBlue = sc.nextLine();	
+		
+		NotPetya notPetya = new NotPetya(startingPoint, remoteShares.equals("y") ? true : false, eternalBlue.equals("y") ? true : false);
 		Thread thread = new Thread(notPetya); 
+		
+		sc.close();
 		
 		thread.start();	
 		
-		SimulationState state = new SimulationState(dhcp); 
+		SimulationState state = new SimulationState(dhcp, turnOff.equals("y") ? true : false); 
 		Thread thread2 = new Thread(state); 
 		thread2.start();
 		try {
@@ -129,8 +140,6 @@ public class SimulationDemo {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
-		
-		
+			
 	}
 }
