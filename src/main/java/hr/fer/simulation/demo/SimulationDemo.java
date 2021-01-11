@@ -3,7 +3,6 @@ package hr.fer.simulation.demo;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.ArrayBlockingQueue;
 
 import hr.fer.simulation.computers.Computer;
 import hr.fer.simulation.networkcomponents.ConnectionType;
@@ -59,6 +58,40 @@ public class SimulationDemo {
 													new OperatingSystem("Windows 10 v1703")));
 		}
 		
+		Subnetwork zagrebRegional = new Subnetwork("Zagreb regional branch", "192.168.54.50");
+		Subnetwork splitRegional = new Subnetwork("Split regional branch", "192.168.54.100");
+		Subnetwork rijekaRegional = new Subnetwork("Rijeka regional branch", "192.168.54.150");
+		
+		counter = 0; 
+		for (int i = 60; i <= 69; i++) {
+			zagrebRegional.addComputer(new Computer("Zagreb Bank counter " + String.valueOf(++counter),
+					"192.168.54." + String.valueOf(i),
+					new OperatingSystem("Windows 7 Service Pack 1 6.1")));
+		}
+		zagrebRegional.addComputer(new Computer("Zagreb Bank officer Workstation", "192.168.54.51", new OperatingSystem("Windows 7 Service Pack 1 6.1")));
+		zagrebRegional.addComputer(new Computer("Zagreb Regional admin workstation", "192.168.54.52",
+									new OperatingSystem("Windows 10 v1703")));
+		
+		counter = 0; 
+		for (int i = 110; i <= 119; i++) {
+			splitRegional.addComputer(new Computer("Split Bank counter " + String.valueOf(++counter),
+					"192.168.54." + String.valueOf(i),
+					new OperatingSystem("Windows 7 Service Pack 1 6.1")));
+		}
+		splitRegional.addComputer(new Computer("Split Bank officer Workstation", "192.168.54.101", new OperatingSystem("Windows 7 Service Pack 1 6.1")));
+		splitRegional.addComputer(new Computer("Split Regional admin workstation", "192.168.54.102",
+									new OperatingSystem("Windows 10 v1703")));
+		
+		counter = 0; 
+		for (int i = 160; i <= 169; i++) {
+			rijekaRegional.addComputer(new Computer("Rijeka Bank counter " + String.valueOf(++counter),
+					"192.168.54." + String.valueOf(i),
+					new OperatingSystem("Windows 7 Service Pack 1 6.1")));
+		}
+		rijekaRegional.addComputer(new Computer("Rijeka Bank officer Workstation", "192.168.54.151", new OperatingSystem("Windows 7 Service Pack 1 6.1")));
+		rijekaRegional.addComputer(new Computer("Rijeka Regional admin workstation", "192.168.54.152",
+									new OperatingSystem("Windows 10 v1703")));
+		
 		Subnetwork datacenter = new Subnetwork("Datacenter", "192.168.52.0");		
 		datacenter.addComputer(new Computer("Backup server", "192.168.52.101", new OperatingSystem("Windows Server 2012 R2 6.3")));
 		datacenter.addComputer(new Computer("Private web server", "192.168.52.102", new OperatingSystem("Windows Server 2012 R2 6.3")));
@@ -72,9 +105,33 @@ public class SimulationDemo {
 		dmzNetwork.addComputer(new Computer("Mail server", "203.0.113.102", new OperatingSystem("Windows Server 2012 R2 6.3")));
 		dmzNetwork.addComputer(new Computer("DNS server", "203.0.113.103", new OperatingSystem("Red Hat Enterprise Linux v7.3")));
 		
+		dhcp.addSubnetwork(splitRegional);
+		dhcp.addSubnetwork(zagrebRegional);
+		dhcp.addSubnetwork(rijekaRegional);
 		dhcp.addSubnetwork(localNetwork);
 		dhcp.addSubnetwork(datacenter);
 		dhcp.addSubnetwork(dmzNetwork);
+		
+		Firewall.addAllowedConnection(splitRegional.getPcByIp("192.168.54.102"), dmzNetwork.getPcByIp("203.0.113.101"), ConnectionType.RDP);
+		Firewall.addAllowedConnection(zagrebRegional.getPcByIp("192.168.54.52"), dmzNetwork.getPcByIp("203.0.113.101"), ConnectionType.RDP);
+		Firewall.addAllowedConnection(rijekaRegional.getPcByIp("192.168.54.152"), dmzNetwork.getPcByIp("203.0.113.101"), ConnectionType.RDP);
+		
+		Firewall.addAllowedConnection(splitRegional.getComputers(), datacenter.getPcByIp("192.168.52.102"), ConnectionType.HTTP);
+		Firewall.addAllowedConnection(zagrebRegional.getComputers(), datacenter.getPcByIp("192.168.52.102"), ConnectionType.HTTP);
+		Firewall.addAllowedConnection(rijekaRegional.getComputers(), datacenter.getPcByIp("192.168.52.102"), ConnectionType.HTTP);
+		
+		Firewall.addAllowedConnection(splitRegional.getComputers(), datacenter.getPcByIp("192.168.52.103"), ConnectionType.SMB);
+		Firewall.addAllowedConnection(zagrebRegional.getComputers(), datacenter.getPcByIp("192.168.52.103"), ConnectionType.SMB);
+		Firewall.addAllowedConnection(rijekaRegional.getComputers(), datacenter.getPcByIp("192.168.52.103"), ConnectionType.SMB);
+		
+		Firewall.addAllowedConnection(datacenter.getComputers(), splitRegional.getPcByIp("192.168.54.102"),  ConnectionType.RDP);
+		Firewall.addAllowedConnection(datacenter.getComputers(), zagrebRegional.getPcByIp("192.168.54.52"),  ConnectionType.RDP);
+		Firewall.addAllowedConnection(datacenter.getComputers(), rijekaRegional.getPcByIp("192.168.54.152"),  ConnectionType.RDP);
+		
+		Firewall.addAllowedConnection(datacenter.getComputers(), splitRegional.getPcByIp("192.168.54.102"),  ConnectionType.RPC);
+		Firewall.addAllowedConnection(datacenter.getComputers(), zagrebRegional.getPcByIp("192.168.54.52"),  ConnectionType.RPC);
+		Firewall.addAllowedConnection(datacenter.getComputers(), rijekaRegional.getPcByIp("192.168.54.152"),  ConnectionType.RPC);
+		
 		
 		Firewall.addAllowedConnection(adminWorkstations, dmzNetwork.getComputers(), ConnectionType.SFTP);
 		Firewall.addAllowedConnection(adminWorkstations, dmzNetwork.getComputers(), ConnectionType.SSH);

@@ -1,6 +1,5 @@
 package hr.fer.simulation.worm;
 
-import java.util.List;
 import java.util.Random;
 
 import hr.fer.simulation.computers.Computer;
