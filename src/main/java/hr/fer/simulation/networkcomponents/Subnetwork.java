@@ -16,6 +16,10 @@ public class Subnetwork {
 		this.ipAddress = ipAddress;
 		this.computers = computers;
 	}
+	
+	public Subnetwork(String name) {
+		this.name = name; 
+	}
 
 	public Subnetwork(String name, String ipAddress) {
 		this.name = name;
