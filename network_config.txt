@@ -1,0 +1,141 @@
+{ 
+"subnetworks": [
+	{
+		"subnetworkName":"localNetwork",
+		"computers": [
+			{
+				"name":"Accountant Workstation 1-10",
+				"ipAddress":"192.168.53.11-20", 
+				"operatingSystem":"Windows 10 v1703"
+			}, 
+			{
+				"name":"Manager Workstation 1-10",
+				"ipAddress":"192.168.53.21-30", 
+				"operatingSystem":"Windows 7 Service Pack 1 6.1"
+			},
+			{
+				"name":"Developer Workstation 1-10",
+				"ipAddress":"192.168.53.31-40", 
+				"operatingSystem":"Windows 10 v1703"
+			},
+			{
+				"name":"Admin Workstation 1-3",
+				"ipAddress":"192.168.53.41-43", 
+				"operatingSystem":"Windows 10 v1703"
+			},
+			{
+				"name":"SecOp Workstation 1-5",
+				"ipAddress":"192.168.53.46-50", 
+				"operatingSystem":"Windows 10 v1703"
+			}
+		]
+	},
+	{
+		"subnetworkName":"datacenter",
+		"computers": [
+			{
+				"name":"Backup server",
+				"ipAddress":"192.168.52.101",
+				"operatingSystem":"Windows Server 2012 R2 6.3"
+			},
+			{
+				"name":"Private web server",
+				"ipAddress":"192.168.52.102",
+				"operatingSystem":"Windows Server 2012 R2 6.3"
+			},
+			{
+				"name":"Database server",
+				"ipAddress":"192.168.52.103",
+				"operatingSystem":"Windows Server 2012 R2 6.3"
+			},
+			{
+				"name":"Domain Controller",
+				"ipAddress":"192.168.52.104",
+				"operatingSystem":"Windows Server 2012 R2 6.3"
+			}				
+		]
+	},
+	{
+		"subnetworkName":"dmzNetwork",
+		"computers": [
+			{
+				"name":"Public web server",
+				"ipAddress":"203.0.113.101",
+				"operatingSystem":"Red Hat Enterprise Linux v7.33"
+			},
+			{
+				"name":"Mail server",
+				"ipAddress":"203.0.113.102",
+				"operatingSystem":"Windows Server 2012 R2 6.3"
+			},
+			{
+				"name":"DNS server",
+				"ipAddress":"203.0.113.103",
+				"operatingSystem":"Red Hat Enterprise Linux v7.3"
+			}				
+		]
+	},
+	{
+		"subnetworkName":"splitRegional",
+		"computers": [
+			{
+				"name":"Split Bank counter 1-10",
+				"ipAddress":"192.168.54.110-119",
+				"operatingSystem":"Windows 7 Service Pack 1 6.1"
+			},
+			{
+				"name":"Split Bank officer Workstation",
+				"ipAddress":"192.168.54.101",
+				"operatingSystem":"Windows 7 Service Pack 1 6.1"
+			},
+			{
+				"name":"Split Regional admin workstation",
+				"ipAddress":"192.168.54.102",
+				"operatingSystem":"Windows 10 v1703"
+			}				
+		]
+	},
+	{
+		"subnetworkName":"zagrebRegional",
+		"computers": [
+			{
+				"name":"Zagreb Bank counter 1-10",
+				"ipAddress":"192.168.54.60-69",
+				"operatingSystem":"Windows 7 Service Pack 1 6.1"
+			},
+			{
+				"name":"Zagreb Bank officer Workstation",
+				"ipAddress":"192.168.54.51",
+				"operatingSystem":"Windows 7 Service Pack 1 6.1"
+			},
+			{
+				"name":"Zagreb Regional admin workstation",
+				"ipAddress":"192.168.54.52",
+				"operatingSystem":"Windows 10 v1703"
+			}				
+		]
+	},
+	{
+		"subnetworkName":"rijekaRegional",
+		"computers": [
+			{
+				"name":"Rijeka Bank counter 1-10",
+				"ipAddress":"192.168.54.160-169",
+				"operatingSystem":"Windows 7 Service Pack 1 6.1"
+			},
+			{
+				"name":"Rijeka Bank officer Workstation",
+				"ipAddress":"192.168.54.151",
+				"operatingSystem":"Windows 7 Service Pack 1 6.1"
+			},
+			{
+				"name":"Rijeka Regional admin workstation",
+				"ipAddress":"192.168.54.152",
+				"operatingSystem":"Windows 10 v1703"
+			}				
+		]
+	}
+	
+]
+}
+	
