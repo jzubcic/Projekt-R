@@ -35,6 +35,7 @@ public class Firewall {
 		
 		for (Connection connection : allowedComputerConnections) {
 			if (connection.getComputer1().equals(computer) && connection.getType().equals(type)) {
+				
 				reachableComputers.add(connection.getComputer2());
 			}
 		}

@@ -122,64 +122,54 @@ public class SimulationDemo {
 		dhcp.addSubnetwork(datacenter);
 		dhcp.addSubnetwork(dmzNetwork);
 		*//*
-		//DODANO
 		Firewall.addAllowedConnection(splitRegional.getPcByIp("192.168.54.102"), dmzNetwork.getPcByIp("203.0.113.101"), ConnectionType.RDP);
 		Firewall.addAllowedConnection(zagrebRegional.getPcByIp("192.168.54.52"), dmzNetwork.getPcByIp("203.0.113.101"), ConnectionType.RDP);
 		Firewall.addAllowedConnection(rijekaRegional.getPcByIp("192.168.54.152"), dmzNetwork.getPcByIp("203.0.113.101"), ConnectionType.RDP); 
 		
-		//DODANO
 		Firewall.addAllowedConnection(splitRegional.getComputers(), datacenter.getPcByIp("192.168.52.102"), ConnectionType.HTTP);
 		Firewall.addAllowedConnection(zagrebRegional.getComputers(), datacenter.getPcByIp("192.168.52.102"), ConnectionType.HTTP);
 		Firewall.addAllowedConnection(rijekaRegional.getComputers(), datacenter.getPcByIp("192.168.52.102"), ConnectionType.HTTP);
 		
-		//DODANO
 		Firewall.addAllowedConnection(splitRegional.getComputers(), datacenter.getPcByIp("192.168.52.103"), ConnectionType.SMB);
 		Firewall.addAllowedConnection(zagrebRegional.getComputers(), datacenter.getPcByIp("192.168.52.103"), ConnectionType.SMB);
 		Firewall.addAllowedConnection(rijekaRegional.getComputers(), datacenter.getPcByIp("192.168.52.103"), ConnectionType.SMB);
 		
-		//DODANO
 		Firewall.addAllowedConnection(datacenter.getComputers(), splitRegional.getPcByIp("192.168.54.102"),  ConnectionType.RDP);
 		Firewall.addAllowedConnection(datacenter.getComputers(), zagrebRegional.getPcByIp("192.168.54.52"),  ConnectionType.RDP);
 		Firewall.addAllowedConnection(datacenter.getComputers(), rijekaRegional.getPcByIp("192.168.54.152"),  ConnectionType.RDP);
 		
-		//DODANO
 		Firewall.addAllowedConnection(datacenter.getComputers(), splitRegional.getPcByIp("192.168.54.102"),  ConnectionType.RPC);
 		Firewall.addAllowedConnection(datacenter.getComputers(), zagrebRegional.getPcByIp("192.168.54.52"),  ConnectionType.RPC);
 		Firewall.addAllowedConnection(datacenter.getComputers(), rijekaRegional.getPcByIp("192.168.54.152"),  ConnectionType.RPC);
 		
-		//DODANO
 		Firewall.addAllowedConnection(adminWorkstations, dmzNetwork.getComputers(), ConnectionType.SFTP);
 		Firewall.addAllowedConnection(adminWorkstations, dmzNetwork.getComputers(), ConnectionType.SSH);
 		Firewall.addAllowedConnection(adminWorkstations, dmzNetwork.getComputers(), ConnectionType.SMB);
-		
-		//DODANO
+
 		Firewall.addAllowedConnection(adminWorkstations, localNetwork.getComputers(), ConnectionType.RDP);
-		
-		//DODANO
+
 		Firewall.addAllowedConnection(adminWorkstations, datacenter.getComputers(), ConnectionType.RDP);
 		Firewall.addAllowedConnection(adminWorkstations, datacenter.getComputers(), ConnectionType.RPC);
-		
-		//DODANO
+
 		Firewall.addAllowedConnection(localNetwork.getComputers(), dmzNetwork.getPcByIp("203.0.113.102"), ConnectionType.HTTPS); // mail server
 		Firewall.addAllowedConnection(localNetwork.getComputers(), dmzNetwork.getPcByIp("203.0.113.101"), ConnectionType.HTTPS); // public web server
 		Firewall.addAllowedConnection(localNetwork.getComputers(), dmzNetwork.getPcByIp("203.0.113.103"), ConnectionType.HTTPS); // DNS
 		
-		
-		//DODANO
+
 		Firewall.addAllowedConnection(datacenter.getPcByIp("192.168.52.101"), dmzNetwork.getPcByIp("203.0.113.101"), ConnectionType.SMB);
 		Firewall.addAllowedConnection(datacenter.getPcByIp("192.168.52.101"), dmzNetwork.getPcByIp("203.0.113.102"), ConnectionType.SMB);
 		Firewall.addAllowedConnection(datacenter.getPcByIp("192.168.52.101"), dmzNetwork.getPcByIp("203.0.113.103"), ConnectionType.SMB);
-		
-		//DODANO
+
 		Firewall.addAllowedConnection(localNetwork.getComputers(), datacenter.getPcByIp("192.168.52.104"), ConnectionType.LDAP);
 		Firewall.addAllowedConnection(localNetwork.getComputers(), datacenter.getPcByIp("192.168.52.102"), ConnectionType.HTTPS);
 		Firewall.addAllowedConnection(localNetwork.getComputers(), datacenter.getPcByIp("192.168.52.103"), ConnectionType.SMB);
 		
 		Firewall.addAllowedConnection(dmzNetwork.getComputers(), datacenter.getPcByIp("192.168.52.104"), ConnectionType.HTTPS);
-		
-		//DODANO
+
 		Firewall.addAllowedConnection(dmzNetwork.getPcByIp("203.0.113.101"), datacenter.getPcByIp("192.168.52.103"), ConnectionType.HTTPS);
 		*/
+		SimulationVisualisation visualisation = new SimulationVisualisation(dhcp); 
+		
 		System.out.print("Please provide IP address from where the worm will start its spread: ");
 		
 		Scanner sc = new Scanner(System.in);
@@ -210,7 +200,7 @@ public class SimulationDemo {
 		
 		thread.start();	
 		
-		SimulationState state = new SimulationState(dhcp, turnOff.equals("y") ? true : false); 
+		SimulationState state = new SimulationState(dhcp, turnOff.equals("y") ? true : false, visualisation); 
 		Thread thread2 = new Thread(state); 
 		thread2.start();
 		try {
@@ -293,7 +283,6 @@ public class SimulationDemo {
 		JSONArray jsonArray = json.getJSONArray("allowedConnections");
 		for (int i = 0; i < jsonArray.length(); i++) {
 			JSONObject jsonObj = (JSONObject) jsonArray.get(i);
-			System.out.println(jsonObj.toString());
 			addAllowedConnection(jsonObj); 
 		}
 	}
@@ -327,7 +316,6 @@ public class SimulationDemo {
 				ipAddresses.add(ipAddress.substring(0, ipAddress.lastIndexOf(".") + 1)+i);
 			}
 		} else if (ipAddress.matches("[a-zA-Z]+")) {
-			System.out.println("Usao sam");
 			Subnetwork subnetwork = dhcp.getSubnetworkByName(ipAddress); 
 			for (Computer c : subnetwork.getComputers()) {
 				ipAddresses.add(c.getIpAddress());
@@ -335,10 +323,7 @@ public class SimulationDemo {
 		} else {
 			ipAddresses.add(ipAddress); 
 		}
-		System.out.println("Adrese su:");
-		for (String address : ipAddresses) {
-			System.out.println(address);
-		}
+
 		return ipAddresses;
 	}
 }

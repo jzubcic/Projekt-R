@@ -24,9 +24,8 @@ public class NotPetya implements Runnable {
 	
 	@Override
 	public void run() {
-		
-		try {
-			Random random = new Random(); 
+		Random random = new Random(); 
+		try {		
 			Thread.sleep(random.nextInt(4000 - 500) + 500);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -55,7 +54,7 @@ public class NotPetya implements Runnable {
 			String credentials;
 		
 			try {
-				Thread.sleep(500);
+				Thread.sleep(1500);
 				credentials = mimikatz.stealCredentials(); // Mimikatz needs a while to extract the credentials
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -63,7 +62,12 @@ public class NotPetya implements Runnable {
 			
 			for (Computer computer : Firewall.getAllReachableComputersMultiple(infectedComputer, ConnectionType.RDP,
 																							 ConnectionType.SSH)) {
-					if (!computer.getInfectedStatus()) {
+					if (computer != null && !computer.getInfectedStatus()) {
+						try {
+							Thread.sleep(random.nextInt(750 - 500) + 500);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 						NotPetya notPetya = new NotPetya(computer, remoteShareSpread, eternalBlueSpread); 
 						Thread thread = new Thread(notPetya); 
 						computer.setInfectedFrom(infectedComputer);
@@ -73,7 +77,7 @@ public class NotPetya implements Runnable {
 		}
 		
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(4000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

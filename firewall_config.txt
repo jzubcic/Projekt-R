@@ -159,6 +159,21 @@
 		"ipAddress1":"dmzNetwork", 
 		"ipAddress2":"192.168.52.104",
 		"connectionType":"HTTPS"
+	},
+	{
+		"ipAddress1":"192.168.53.41-43", 
+		"ipAddress2":"splitRegional",
+		"connectionType":"RDP"
+	},
+	{
+		"ipAddress1":"192.168.53.41-43", 
+		"ipAddress2":"zagrebRegional",
+		"connectionType":"RDP"
+	},
+	{
+		"ipAddress1":"192.168.53.41-43", 
+		"ipAddress2":"rijekaRegional",
+		"connectionType":"RDP"
 	}	
 ]
 }
